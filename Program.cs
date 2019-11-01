@@ -117,12 +117,12 @@ namespace BlogsConsole
                             // Display all posts from the database
                             int bChoice;
                             var postQuery = db.Posts.OrderBy(p => p.Title).ToList();
-                            var blogPosts = db.Blogs.OrderBy(b => b.Name);
+                            var blogPosts = db.Blogs.OrderBy(b => b.BlogId);
                             Console.WriteLine("Select blog posts to display:");
-                            Console.WriteLine("0\tAll blogs");
+                            Console.WriteLine("0.  All blogs");
                             foreach (var item in blogPosts)
                             {
-                                Console.WriteLine("{0}\t{1}", item.BlogId, item.Name);
+                                Console.WriteLine("{0}.  {1}", item.BlogId, item.Name);
                             }
                             if (int.TryParse(Console.ReadLine(), out bChoice)) { 
                                 if (bChoice == 0) { 
@@ -132,8 +132,9 @@ namespace BlogsConsole
                                     }
 
                                     Console.WriteLine(count + " blogs found.");
-
+                                    Console.WriteLine();
                                     Console.WriteLine("All posts in the database:");
+                                    Console.WriteLine();
                                     foreach (var blogItem in blogPosts)
                                     {
                                         Console.WriteLine("Blog: " + blogItem.Name);
@@ -145,15 +146,15 @@ namespace BlogsConsole
                                             Console.WriteLine("");
                                         }
                                     }
-                                    Console.WriteLine("");
                                     Console.WriteLine("Press Enter to continue.");
                                     Console.WriteLine();
                                 }
-                                if (db.Blogs.Any(b => b.BlogId == bChoice)){ 
-                                    Console.WriteLine("All posts in ");
-                                    foreach (var blogItem in blogPosts)
+                                else
+                                {
+                                    foreach (var blogItem in blogPosts.Where(b => b.BlogId == bChoice))
                                     {
-                                        Console.WriteLine("Blog: " + blogItem.Name);
+                                        Console.WriteLine($"All posts in " + blogItem.Name + ":");
+                                        Console.WriteLine();
 
                                         foreach (var postItem in postQuery.Where(p => p.BlogId == blogItem.BlogId))
                                         {
